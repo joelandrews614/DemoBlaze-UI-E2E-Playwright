@@ -80,5 +80,39 @@ test.describe("Login Functionalities", () => {
 
   })
 
+  test("Failure in Login using Invalid Password", async ({page}) => {
+
+    const loginPage = new LoginPage(page)
+
+    await loginPage.enterUsernameTxt("Test")
+
+    await loginPage.enterPasswordTxt("Test")
+
+    await loginPage.clickLoginBtn()
+
+    await page.on('dialog', async (alert) => {
+      await expect(alert.message()).toContain("Wrong password.")
+      await alert.accept()
+    });
+
+  })
+
+  test("Failure in Login without Entering Username and Password", async ({page}) => {
+
+    const loginPage = new LoginPage(page)
+
+    await loginPage.enterUsernameTxt("")
+    
+    await loginPage.enterPasswordTxt("")
+
+    await loginPage.clickLoginBtn()
+
+    await page.on("dialog", async (alert) => {
+      await expect(alert.message()).toContain("Please fill out Username and PasswordTEST")
+      await alert.accept()
+    })
+
+  })
+
 })
 
